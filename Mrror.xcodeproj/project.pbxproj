@@ -14,6 +14,8 @@
 		F1A77C0E1F45613600BCEE16 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F1A77C0C1F45613600BCEE16 /* LaunchScreen.storyboard */; };
 		F1A77C191F45613600BCEE16 /* MrrorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A77C181F45613600BCEE16 /* MrrorTests.swift */; };
 		F1A77C241F45613600BCEE16 /* MrrorUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A77C231F45613600BCEE16 /* MrrorUITests.swift */; };
+		F1A77C371F4561FB00BCEE16 /* Shapes.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A77C361F4561FB00BCEE16 /* Shapes.swift */; };
+		F1A77C391F45750700BCEE16 /* ShapeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A77C381F45750700BCEE16 /* ShapeController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +49,8 @@
 		F1A77C1F1F45613600BCEE16 /* MrrorUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MrrorUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F1A77C231F45613600BCEE16 /* MrrorUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MrrorUITests.swift; sourceTree = "<group>"; };
 		F1A77C251F45613600BCEE16 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F1A77C361F4561FB00BCEE16 /* Shapes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Shapes.swift; sourceTree = "<group>"; };
+		F1A77C381F45750700BCEE16 /* ShapeController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShapeController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,12 +101,11 @@
 		F1A77C021F45613600BCEE16 /* Mrror */ = {
 			isa = PBXGroup;
 			children = (
-				F1A77C031F45613600BCEE16 /* AppDelegate.swift */,
-				F1A77C051F45613600BCEE16 /* ViewController.swift */,
-				F1A77C071F45613600BCEE16 /* Main.storyboard */,
-				F1A77C0A1F45613600BCEE16 /* Assets.xcassets */,
-				F1A77C0C1F45613600BCEE16 /* LaunchScreen.storyboard */,
-				F1A77C0F1F45613600BCEE16 /* Info.plist */,
+				F1A77C351F4561A100BCEE16 /* Models */,
+				F1A77C321F45618000BCEE16 /* Etc */,
+				F1A77C331F45618800BCEE16 /* Controllers */,
+				F1A77C311F45616100BCEE16 /* Assets */,
+				F1A77C341F45619500BCEE16 /* Views */,
 			);
 			path = Mrror;
 			sourceTree = "<group>";
@@ -123,6 +126,49 @@
 				F1A77C251F45613600BCEE16 /* Info.plist */,
 			);
 			path = MrrorUITests;
+			sourceTree = "<group>";
+		};
+		F1A77C311F45616100BCEE16 /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				F1A77C0A1F45613600BCEE16 /* Assets.xcassets */,
+			);
+			name = Assets;
+			sourceTree = "<group>";
+		};
+		F1A77C321F45618000BCEE16 /* Etc */ = {
+			isa = PBXGroup;
+			children = (
+				F1A77C031F45613600BCEE16 /* AppDelegate.swift */,
+				F1A77C0F1F45613600BCEE16 /* Info.plist */,
+			);
+			name = Etc;
+			sourceTree = "<group>";
+		};
+		F1A77C331F45618800BCEE16 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				F1A77C051F45613600BCEE16 /* ViewController.swift */,
+				F1A77C381F45750700BCEE16 /* ShapeController.swift */,
+			);
+			name = Controllers;
+			sourceTree = "<group>";
+		};
+		F1A77C341F45619500BCEE16 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				F1A77C071F45613600BCEE16 /* Main.storyboard */,
+				F1A77C0C1F45613600BCEE16 /* LaunchScreen.storyboard */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
+		F1A77C351F4561A100BCEE16 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				F1A77C361F4561FB00BCEE16 /* Shapes.swift */,
+			);
+			name = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -260,7 +306,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				F1A77C061F45613600BCEE16 /* ViewController.swift in Sources */,
+				F1A77C391F45750700BCEE16 /* ShapeController.swift in Sources */,
 				F1A77C041F45613600BCEE16 /* AppDelegate.swift in Sources */,
+				F1A77C371F4561FB00BCEE16 /* Shapes.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -416,7 +464,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = Mrror/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = me.thisisxvr.Mrror;
+				PRODUCT_BUNDLE_IDENTIFIER = me.thisisxvr.mrror;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 			};
@@ -428,7 +476,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = Mrror/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = me.thisisxvr.Mrror;
+				PRODUCT_BUNDLE_IDENTIFIER = me.thisisxvr.mrror;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 			};
