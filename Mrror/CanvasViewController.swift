@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  CanvasViewController.swift
 //  Mrror
 //
 //  Created by Xavier Francis on 17/08/17.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class CanvasViewController: UIViewController {
     
     var start: CGPoint = CGPoint.zero
     var finish: CGPoint = CGPoint.zero
@@ -42,6 +42,22 @@ class ViewController: UIViewController {
         super.touchesEnded(touches, with: event)
     }
 
+    @IBAction func showOptionsView(_ sender: UIButton) {
+        // only apply the blur if the user hasn't disabled transparency effects
+        if !UIAccessibilityIsReduceTransparencyEnabled() {
+            self.view.backgroundColor = UIColor.clear
+            
+            let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.light)
+            let blurEffectView = UIVisualEffectView(effect: blurEffect)
+            blurEffectView.frame = self.view.bounds
+            blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+            
+            self.view.addSubview(blurEffectView)
+        } else {
+            self.view.backgroundColor = UIColor.lightGray
+        }
+    }
+    
     @IBAction func draw(_ sender: UIPanGestureRecognizer) {
         if sender.state == .began {
             customPath = UIBezierPath()
@@ -51,6 +67,7 @@ class ViewController: UIViewController {
             layer?.lineWidth = 1.0
             layer?.strokeColor = UIColor.blue.cgColor
             layer?.lineCap = lineCap
+            self.view.layer.addSublayer(layer!)
             
 //            self.view.subviews.first(where: canvas).layer.addSublayer(layer!)
         } else if sender.state == .changed {
