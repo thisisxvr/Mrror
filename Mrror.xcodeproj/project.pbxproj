@@ -15,7 +15,6 @@
 		F1A77C0B1F45613600BCEE16 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F1A77C0A1F45613600BCEE16 /* Assets.xcassets */; };
 		F1A77C0E1F45613600BCEE16 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F1A77C0C1F45613600BCEE16 /* LaunchScreen.storyboard */; };
 		F1A77C371F4561FB00BCEE16 /* Shapes.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A77C361F4561FB00BCEE16 /* Shapes.swift */; };
-		F1A77C391F45750700BCEE16 /* ShapeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A77C381F45750700BCEE16 /* ShapeController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,7 +47,6 @@
 		F1A77C141F45613600BCEE16 /* MrrorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MrrorTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F1A77C1F1F45613600BCEE16 /* MrrorUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MrrorUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F1A77C361F4561FB00BCEE16 /* Shapes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Shapes.swift; sourceTree = "<group>"; };
-		F1A77C381F45750700BCEE16 /* ShapeController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShapeController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -127,7 +125,6 @@
 			isa = PBXGroup;
 			children = (
 				F1A77C051F45613600BCEE16 /* CanvasViewController.swift */,
-				F1A77C381F45750700BCEE16 /* ShapeController.swift */,
 				F1760DA81F4A8BA800DB46DB /* OptionsViewController.swift */,
 			);
 			name = Controllers;
@@ -287,7 +284,6 @@
 			files = (
 				F1A77C061F45613600BCEE16 /* CanvasViewController.swift in Sources */,
 				F1760DA71F4A6EF900DB46DB /* Colors.swift in Sources */,
-				F1A77C391F45750700BCEE16 /* ShapeController.swift in Sources */,
 				F1760DA91F4A8BA800DB46DB /* OptionsViewController.swift in Sources */,
 				F1A77C041F45613600BCEE16 /* AppDelegate.swift in Sources */,
 				F1A77C371F4561FB00BCEE16 /* Shapes.swift in Sources */,
