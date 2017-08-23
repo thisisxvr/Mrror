@@ -8,7 +8,45 @@
 
 import UIKit
 
-class CanvasViewController: UIViewController {
+
+extension UIImage {
+    convenience init(myView: UIView) {
+//        if #available(iOS 10.0, *) {
+//            let rendererFormat = UIGraphicsImageRendererFormat.default()
+//            rendererFormat.scale = self.layer.contentsScale
+//            rendererFormat.opaque = self.isOpaque
+//            let renderer = UIGraphicsImageRenderer(size: self.bounds.size, format: rendererFormat)
+//            
+//            return
+//                renderer.image {
+//                    _ in
+//                    
+//                    self.drawHierarchy(in: self.bounds, afterScreenUpdates: afterScreenUpdates)
+//            }
+//        } else {
+//            UIGraphicsBeginImageContextWithOptions(self.bounds.size, self.isOpaque, self.layer.contentsScale)
+//
+//            defer {
+//                UIGraphicsEndImageContext()
+//            }
+//            
+//            self.drawHierarchy(in: self.bounds, afterScreenUpdates: afterScreenUpdates)
+//            
+//            return UIGraphicsGetImageFromCurrentImageContext()
+//        }
+        UIGraphicsBeginImageContextWithOptions(myView.bounds.size, myView.isOpaque, 0.0)
+        myView.drawHierarchy(in: myView.bounds, afterScreenUpdates: false)
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+//        print(image!)
+        self.init(cgImage: (image?.cgImage)!)
+//        myImageView.image = snapshotImageFromMyView
+    }
+}
+
+class CanvasViewController: UIViewController, DataEnteredDelegate {
+    
+    @IBOutlet weak var canvas: UIView!
     
     var start: CGPoint = CGPoint.zero
     var finish: CGPoint = CGPoint.zero
@@ -20,8 +58,6 @@ class CanvasViewController: UIViewController {
     var shape = Shapes.freeHand
     let shapes = [Shapes.freeHand, Shapes.line, Shapes.oval, Shapes.rectangle, Shapes.square, Shapes.triangle]
     let stackView = UIStackView()
-
-    @IBOutlet weak var canvas: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,20 +69,34 @@ class CanvasViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "showOptionsSegue" {
+            let optionsViewController = segue.destination as! OptionsViewController
+            optionsViewController.modalPresentationStyle = UIModalPresentationStyle.overCurrentContext // Allows the canvas to be seen behind the options screen.
+            
+            var optionsTmp = [String: Any]()
+            optionsTmp["LIN"] = lineWidth
+            optionsTmp["CLR"] = color
+            optionsTmp["SHP"] = shape
+            optionsViewController.optionsTmp = optionsTmp // Sets the line width slider in the Options view to real value.
+            optionsViewController.delegate = self
+        }
+    }
+    
 //    @IBAction func showOptionsView(_ sender: UIButton) {
 //        // Only apply the blur if the user hasn't disabled transparency effects.
-//        if !UIAccessibilityIsReduceTransparencyEnabled() {
-//            self.view.backgroundColor = UIColor.clear
-//            
-//            let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.light)
-//            let blurEffectView = UIVisualEffectView(effect: blurEffect)
-//            blurEffectView.frame = self.view.bounds
-//            blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-//            
-//            self.view.addSubview(blurEffectView)
-//        } else {
-//            self.view.backgroundColor = UIColor.lightGray
-//        }
+////        if !UIAccessibilityIsReduceTransparencyEnabled() {
+////            self.view.backgroundColor = UIColor.clear
+////            
+////            let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.light)
+////            let blurEffectView = UIVisualEffectView(effect: blurEffect)
+////            blurEffectView.frame = self.view.bounds
+////            blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+////            
+////            self.view.addSubview(blurEffectView)
+////        } else {
+////            self.view.backgroundColor = UIColor.lightGray
+////        }
 //    }
     
     @IBAction func draw(_ sender: UIPanGestureRecognizer) {
@@ -81,7 +131,7 @@ class CanvasViewController: UIViewController {
                 layer?.path = Shape().rectangle(startPoint: start, translationPoint: translation).cgPath
             case .triangle:
                 finish = sender.location(in: sender.view)
-//                    customPath? = UIBezierPath()
+                customPath? = UIBezierPath()
                 customPath?.move(to: CGPoint(x: start.x, y: start.y))
                 customPath?.addLine(to: CGPoint(x: finish.x, y: finish.y))
                 customPath?.addLine(to: CGPoint(x: finish.x - ((finish.x - start.x) * 2), y: finish.y))
@@ -91,37 +141,20 @@ class CanvasViewController: UIViewController {
             }
         }
     }
-
-    @IBAction func shapeDidSelect(_ sender: UIButton) {
-        shape = shapes[sender.tag]
-    }
     
     // MARK: Unwind Segue
     @IBAction func unwindSegue(segue: UIStoryboardSegue) {
         // do nothing
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "showOptionsSegue" {
-            let optionsViewController = segue.destination as! OptionsViewController
-            optionsViewController.modalPresentationStyle = UIModalPresentationStyle.overCurrentContext // Allows the canvas to be seen behind the options screen.
-            optionsViewController.lineWidthTmp = lineWidth // Sets the line width slider in the Options view to real value.
-            optionsViewController.delegate = self
-        }
-    }
-    
-    func optionsModified(options: [String: Any]?) {
-        if options != nil {
-            shape = options?["SHP"] as! Shapes
-            color = options?["CLR"] as! CGColor
-            lineWidth = options?["LIN"] as! CGFloat
-        } else {
-            self.stackView.layer.sublayers = nil
-        }
+    func optionsModified(to options: [String: Any]) {
+        shape = options["SHP"] as! Shapes
+        color = options["CLR"] as! CGColor
+        lineWidth = options["LIN"] as! CGFloat
         
-        let img = UIImage.init(myView: canvas)
-        UIImageWriteToSavedPhotosAlbum(img, nil, nil, nil)
-        
+//        let img = UIImage.init(myView: canvas)
+//        UIImageWriteToSavedPhotosAlbum(img, nil, nil, nil)
+//        
 //        if let img = stackView.renderToImage() {
 //            if let compressData = UIImageJPEGRepresentation(img, 0.9) {
 //                if let compressedImage = UIImage(data: compressData) {

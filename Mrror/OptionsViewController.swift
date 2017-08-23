@@ -10,15 +10,16 @@ import UIKit
 
 // Protocol used to send data back to parent ViewController.
 protocol DataEnteredDelegate: class {
-    func optionsModified(options: [String: Any]?)
+    func optionsModified(to options: [String: Any])
 }
 
 class OptionsViewController: UIViewController {
     
     @IBOutlet weak var lineWidthSlider: UISlider!
+    
     weak var delegate: DataEnteredDelegate? = nil
-    var options: [String: Any]? // Options bag: SHP = Shape, LIN = Line width, CLR = Color.
-    var lineWidthTmp: CGFloat = 0.0 // Temporary var to set line width slider to real value.
+    var options = [String: Any]() // Options bag: SHP = Shape, LIN = Line width, CLR = Color.
+    var optionsTmp = [String: Any]() // Temporary var to set line width slider to real value.
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,51 +34,50 @@ class OptionsViewController: UIViewController {
             
             self.view.insertSubview(blurEffectView, at: 0)
         } else {
-            self.view.backgroundColor = UIColor.brown
+            self.view.backgroundColor = UIColor.lightGray
         }
         
-        lineWidthSlider.value = Float(lineWidthTmp)  // Sets the line width slider to real value.
+        lineWidthSlider.value = Float(optionsTmp["LIN"] as! CGFloat)  // Sets the line width slider to real value.
     }
     
     @IBAction func colorSelected(_ sender: UIButton) {
-//        switch sender.tag {
-//        case 0:
-//            options["CLR"] = UIColor.blue.cgColor
-//        case 1:
-//            options["CLR"] = UIColor.red.cgColor
-//        case 2:
-//            options["CLR"] = UIColor.yellow.cgColor
-//        case 3:
-//            options["CLR"] = UIColor.purple.cgColor
-//        case 4:
-//            options["CLR"] = UIColor.green.cgColor
-//        default:
-//            options["CLR"] = UIColor.blue.cgColor
-//        }
+        switch sender.tag {
+        case 0:
+            options["CLR"] = UIColor.blue.cgColor
+        case 1:
+            options["CLR"] = UIColor.red.cgColor
+        case 2:
+            options["CLR"] = UIColor.yellow.cgColor
+        case 3:
+            options["CLR"] = UIColor.purple.cgColor
+        case 4:
+            options["CLR"] = UIColor.green.cgColor
+        default:
+            options["CLR"] = UIColor.blue.cgColor
+        }
     }
     
     @IBAction func lineWidthChanged(_ sender: UISlider) {
-        options?["LIN"] = CGFloat(sender.value)
-//        print(options["LIN"]!)
+        options["LIN"] = CGFloat(sender.value)
     }
     
     @IBAction func shapeSelected(_ sender: UIButton) {
-//        switch sender.tag {
-//        case Shapes.freeHand.rawValue:
-//            options["SHP"] = Shapes.freeHand
-//        case Shapes.line.rawValue:
-//            options["SHP"] = Shapes.line
-//        case Shapes.oval.rawValue:
-//            options["SHP"] = Shapes.oval
-//        case Shapes.rectangle.rawValue:
-//            options["SHP"] = Shapes.rectangle
-//        case Shapes.square.rawValue:
-//            options["SHP"] = Shapes.square
-//        case Shapes.triangle.rawValue:
-//            options["SHP"] = Shapes.triangle
-//        default:
-//            options["SHP"] = Shapes.freeHand
-//        }
+        switch sender.tag {
+        case Shapes.freeHand.rawValue:
+            options["SHP"] = Shapes.freeHand
+        case Shapes.line.rawValue:
+            options["SHP"] = Shapes.line
+        case Shapes.oval.rawValue:
+            options["SHP"] = Shapes.oval
+        case Shapes.rectangle.rawValue:
+            options["SHP"] = Shapes.rectangle
+        case Shapes.square.rawValue:
+            options["SHP"] = Shapes.square
+        case Shapes.triangle.rawValue:
+            options["SHP"] = Shapes.triangle
+        default:
+            options["SHP"] = Shapes.freeHand
+        }
     }
 
     @IBAction func clearCanvas(_ sender: UIButton) {
@@ -100,11 +100,12 @@ class OptionsViewController: UIViewController {
     }
     
     @IBAction func backButton(_ sender: UIButton) {
-        if options?["LIN"] == nil {
-            options?["LIN"] = lineWidthTmp
-        }
+        if options["SHP"] == nil { options["SHP"] = optionsTmp["SHP"] }
+        if options["LIN"] == nil { options["LIN"] = optionsTmp["LIN"] }
+        if options["CLR"] == nil { options["CLR"] = optionsTmp["CLR"] }
         
-        delegate?.optionsModified(options: options)
-        _ = self.navigationController?.popViewController(animated: true)
+        delegate?.optionsModified(to: options)
+//        _ = self.navigationController?.popToRootViewController(animated: true)
+        performSegue(withIdentifier: "unwindToCanvasSegue", sender: self)
     }
 }
