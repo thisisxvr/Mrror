@@ -32,6 +32,14 @@ class Shape: UIBezierPath {
             width: translationPoint.x,
             height: translationPoint.y))
     }
+
+    func square(startPoint: CGPoint, translationPoint: CGPoint) -> UIBezierPath {
+        return UIBezierPath(rect: CGRect(
+            x: startPoint.x,
+            y: startPoint.x,
+            width: translationPoint.x,
+            height: translationPoint.x))
+    }
     
     func rectangle(startPoint: CGPoint, translationPoint: CGPoint) -> UIBezierPath {
         return UIBezierPath(rect: CGRect(
@@ -40,10 +48,4 @@ class Shape: UIBezierPath {
             width: translationPoint.x,
             height: translationPoint.y))
     }
-    
-    //    func square(startPoint: CGPoint, endPoint: CGPoint) -> UIBezierPath {
-    //    }
-    
-    //    func triangle(startPoint: CGPoint, endPoint: CGPoint) -> UIBezierPath {
-    //    }
 }

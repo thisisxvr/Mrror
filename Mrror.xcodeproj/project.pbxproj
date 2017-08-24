@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		F1760DA71F4A6EF900DB46DB /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1760DA61F4A6EF900DB46DB /* Colors.swift */; };
 		F1760DA91F4A8BA800DB46DB /* OptionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1760DA81F4A8BA800DB46DB /* OptionsViewController.swift */; };
 		F1A77C041F45613600BCEE16 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A77C031F45613600BCEE16 /* AppDelegate.swift */; };
 		F1A77C061F45613600BCEE16 /* CanvasViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A77C051F45613600BCEE16 /* CanvasViewController.swift */; };
@@ -35,7 +34,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		F1760DA61F4A6EF900DB46DB /* Colors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		F1760DA81F4A8BA800DB46DB /* OptionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OptionsViewController.swift; sourceTree = "<group>"; };
 		F1A77C001F45613600BCEE16 /* Mrror.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mrror.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F1A77C031F45613600BCEE16 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -143,7 +141,6 @@
 			isa = PBXGroup;
 			children = (
 				F1A77C361F4561FB00BCEE16 /* Shapes.swift */,
-				F1760DA61F4A6EF900DB46DB /* Colors.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -283,7 +280,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				F1A77C061F45613600BCEE16 /* CanvasViewController.swift in Sources */,
-				F1760DA71F4A6EF900DB46DB /* Colors.swift in Sources */,
 				F1760DA91F4A8BA800DB46DB /* OptionsViewController.swift in Sources */,
 				F1A77C041F45613600BCEE16 /* AppDelegate.swift in Sources */,
 				F1A77C371F4561FB00BCEE16 /* Shapes.swift in Sources */,
