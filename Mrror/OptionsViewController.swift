@@ -11,16 +11,20 @@ import UIKit
 // Protocol used to send data back to parent ViewController.
 protocol DataEnteredDelegate: class {
     func optionsModified(to options: [String: Any])
+    func clearCanvas()
+    func saveCanvas()
 }
 
 class OptionsViewController: UIViewController {
     
+    // MARK: Properties.
     @IBOutlet weak var lineWidthSlider: UISlider!
     
     weak var delegate: DataEnteredDelegate? = nil
     var options = [String: Any]() // Options bag: SHP = Shape, LIN = Line width, CLR = Color.
-    var optionsTmp = [String: Any]() // Temporary var to set line width slider to real value.
+    var optionsTmp = [String: Any]() // Default / previous values.
     
+    // MARK: Overrides.
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -37,9 +41,11 @@ class OptionsViewController: UIViewController {
             self.view.backgroundColor = UIColor.lightGray
         }
         
-        lineWidthSlider.value = Float(optionsTmp["LIN"] as! CGFloat)  // Sets the line width slider to real value.
+        // Sets the line width slider to real value.
+        lineWidthSlider.setValue(Float(optionsTmp["LIN"] as! CGFloat), animated: true)
     }
     
+    // MARK: Event handlers.
     @IBAction func colorSelected(_ sender: UIButton) {
         switch sender.tag {
         case 0:
@@ -83,29 +89,42 @@ class OptionsViewController: UIViewController {
     @IBAction func clearCanvas(_ sender: UIButton) {
         let clearAlert = UIAlertController(title: "⚠️", message: "Clear Canvas?", preferredStyle: UIAlertControllerStyle.alert)
         
-        clearAlert.addAction(UIAlertAction(title: "Clear", style: .default, handler: { (action) in
-//            self.navigationController?.popViewController(animated: true)
-//            self.delegate?.optionsModified(options: nil)
-//            self.backButton()
-            return
-        }))
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         
-        clearAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        let clear = UIAlertAction(title: "Clear", style: .destructive, handler: { (action) in
+            self.delegate?.clearCanvas()
+            self.performSegue(withIdentifier: "unwindToCanvasSegue", sender: self)
+            return
+        })
+        
+        clearAlert.addAction(clear)
+        clearAlert.addAction(cancel)
         
         present(clearAlert, animated: true, completion: nil)
     }
     
-    @IBAction func saveDrawing(_ sender: UIButton) {
-//        self.renderToImage()
+    @IBAction func saveCanvas(_ sender: UIButton) {
+        let saveConfirm = UIAlertController(title: "💩", message: "Save Canvas?", preferredStyle: UIAlertControllerStyle.alert)
+        
+        saveConfirm.addAction(UIAlertAction(title: "Save", style: .default, handler: { (action) in
+            self.delegate?.saveCanvas()
+            self.performSegue(withIdentifier: "unwindToCanvasSegue", sender: self)
+            return
+        }))
+        
+        saveConfirm.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        
+        present(saveConfirm, animated: true, completion: nil)
     }
     
     @IBAction func backButton(_ sender: UIButton) {
+        // Set to previous values if no options were selected.
         if options["SHP"] == nil { options["SHP"] = optionsTmp["SHP"] }
         if options["LIN"] == nil { options["LIN"] = optionsTmp["LIN"] }
         if options["CLR"] == nil { options["CLR"] = optionsTmp["CLR"] }
         
+        // Pass options bag back and return to canvas.
         delegate?.optionsModified(to: options)
-//        _ = self.navigationController?.popToRootViewController(animated: true)
         performSegue(withIdentifier: "unwindToCanvasSegue", sender: self)
     }
 }
