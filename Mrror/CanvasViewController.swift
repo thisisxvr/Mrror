@@ -8,44 +8,20 @@
 
 import UIKit
 
-
+// UIImage extension to create image from UIView
 extension UIImage {
     convenience init(myView: UIView) {
-//        if #available(iOS 10.0, *) {
-//            let rendererFormat = UIGraphicsImageRendererFormat.default()
-//            rendererFormat.scale = self.layer.contentsScale
-//            rendererFormat.opaque = self.isOpaque
-//            let renderer = UIGraphicsImageRenderer(size: self.bounds.size, format: rendererFormat)
-//            
-//            return
-//                renderer.image {
-//                    _ in
-//                    
-//                    self.drawHierarchy(in: self.bounds, afterScreenUpdates: afterScreenUpdates)
-//            }
-//        } else {
-//            UIGraphicsBeginImageContextWithOptions(self.bounds.size, self.isOpaque, self.layer.contentsScale)
-//
-//            defer {
-//                UIGraphicsEndImageContext()
-//            }
-//            
-//            self.drawHierarchy(in: self.bounds, afterScreenUpdates: afterScreenUpdates)
-//            
-//            return UIGraphicsGetImageFromCurrentImageContext()
-//        }
         UIGraphicsBeginImageContextWithOptions(myView.bounds.size, myView.isOpaque, 0.0)
         myView.drawHierarchy(in: myView.bounds, afterScreenUpdates: false)
         let image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
-//        print(image!)
         self.init(cgImage: (image?.cgImage)!)
-//        myImageView.image = snapshotImageFromMyView
     }
 }
 
 class CanvasViewController: UIViewController, DataEnteredDelegate {
-    
+
+    // MARK: Properties.
     @IBOutlet weak var canvas: UIView!
     
     var start: CGPoint = CGPoint.zero
@@ -57,11 +33,10 @@ class CanvasViewController: UIViewController, DataEnteredDelegate {
     var color = UIColor.blue.cgColor
     var shape = Shapes.freeHand
     let shapes = [Shapes.freeHand, Shapes.line, Shapes.oval, Shapes.rectangle, Shapes.square, Shapes.triangle]
-    let stackView = UIStackView()
     
+    // MARK: Overrides.
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.addSubview(stackView)
     }
 
     override func didReceiveMemoryWarning() {
@@ -83,22 +58,7 @@ class CanvasViewController: UIViewController, DataEnteredDelegate {
         }
     }
     
-//    @IBAction func showOptionsView(_ sender: UIButton) {
-//        // Only apply the blur if the user hasn't disabled transparency effects.
-////        if !UIAccessibilityIsReduceTransparencyEnabled() {
-////            self.view.backgroundColor = UIColor.clear
-////            
-////            let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.light)
-////            let blurEffectView = UIVisualEffectView(effect: blurEffect)
-////            blurEffectView.frame = self.view.bounds
-////            blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-////            
-////            self.view.addSubview(blurEffectView)
-////        } else {
-////            self.view.backgroundColor = UIColor.lightGray
-////        }
-//    }
-    
+    // MARK: Event handlers.
     @IBAction func draw(_ sender: UIPanGestureRecognizer) {
         if sender.state == .began {
             customPath = UIBezierPath()
@@ -108,9 +68,7 @@ class CanvasViewController: UIViewController, DataEnteredDelegate {
             layer?.lineWidth = lineWidth
             layer?.strokeColor = color
             layer?.lineCap = lineCap
-            self.view.layer.addSublayer(layer!)
-            
-//            self.view.subviews.first(where: canvas).layer.addSublayer(layer!)
+            canvas.layer.addSublayer(layer!)
         } else if sender.state == .changed {
             switch shape {
             case .freeHand:
@@ -126,6 +84,9 @@ class CanvasViewController: UIViewController, DataEnteredDelegate {
             case .oval:
                 let translation = sender.translation(in: sender.view)
                 layer?.path = Shape().oval(startPoint: start, translationPoint: translation).cgPath
+            case .square:
+                let translation = sender.translation(in: sender.view)
+                layer?.path = Shape().square(startPoint: start, translationPoint: translation).cgPath
             case .rectangle:
                 let translation = sender.translation(in: sender.view)
                 layer?.path = Shape().rectangle(startPoint: start, translationPoint: translation).cgPath
@@ -137,34 +98,27 @@ class CanvasViewController: UIViewController, DataEnteredDelegate {
                 customPath?.addLine(to: CGPoint(x: finish.x - ((finish.x - start.x) * 2), y: finish.y))
                 customPath?.close()
                 layer?.path = customPath?.cgPath
-            case .square: break
             }
         }
     }
     
-    // MARK: Unwind Segue
     @IBAction func unwindSegue(segue: UIStoryboardSegue) {
-        // do nothing
+        // Do nothing. 
+    }
+    
+    // MARK: Conform to protocol DataEnteredDelegate.
+    func clearCanvas() {
+        canvas.layer.sublayers = nil
+    }
+    
+    func saveCanvas() {
+        let img = UIImage.init(myView: canvas)
+        UIImageWriteToSavedPhotosAlbum(img, nil, nil, nil)
     }
     
     func optionsModified(to options: [String: Any]) {
         shape = options["SHP"] as! Shapes
         color = options["CLR"] as! CGColor
         lineWidth = options["LIN"] as! CGFloat
-        
-//        let img = UIImage.init(myView: canvas)
-//        UIImageWriteToSavedPhotosAlbum(img, nil, nil, nil)
-//        
-//        if let img = stackView.renderToImage() {
-//            if let compressData = UIImageJPEGRepresentation(img, 0.9) {
-//                if let compressedImage = UIImage(data: compressData) {
-//                    UIImageWriteToSavedPhotosAlbum(compressedImage, nil, nil, nil)
-//                    print("Image saved.")
-//                }
-//            } else {
-//                print("Returned nil.")
-//            }
-//        }
     }
 }
-
