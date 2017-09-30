@@ -28,9 +28,9 @@ class LoginViewController: UIViewController {
                 try managedObjectContext.save()
                 
                 // Debug.
-                //let historyReq = NSFetchRequest<History>(entityName: History.entityName)
-                //let history = try managedObjectContext.fetch(historyReq)
-                //print(history)
+                let historyReq = NSFetchRequest<History>(entityName: History.entityName)
+                let history = try managedObjectContext.fetch(historyReq)
+                print(history)
                 
             } catch {
                 print("Saving History entry went wrong: \(error)")

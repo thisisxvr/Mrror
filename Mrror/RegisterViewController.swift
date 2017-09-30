@@ -50,7 +50,7 @@ class RegisterViewController: UIViewController, UIPickerViewDelegate, UIPickerVi
         let password = passwordTxtBox?.text
         let occupation = occupationTxtBox?.text
         let gender = genderTxtBox?.text
-        let ageGroup = ageGroupTxtBox?.text
+        let ageGroupText = ageGroupTxtBox?.text
         
         let userEntity = NSEntityDescription.insertNewObject(forEntityName: User.entityName, into: managedObjectContext) as! User
         let userReq = NSFetchRequest<User>(entityName: User.entityName)
@@ -90,7 +90,7 @@ class RegisterViewController: UIViewController, UIPickerViewDelegate, UIPickerVi
         
         if let occ = occupation { userEntity.occupation = occ }
         if let gen = gender { userEntity.gender = gen }
-        if let age = ageGroup { userEntity.ageGroup = age }
+        if let age = ageGroupText { userEntity.ageGroup = age }
         userEntity.registrationTime = Date.init()
         
         // Persist to DB.
