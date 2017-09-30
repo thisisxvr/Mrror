@@ -8,6 +8,7 @@
 
 import UIKit
 
+// Define type 'Shapes'.
 enum Shapes: Int {
     case freeHand = 0
     case line
@@ -17,6 +18,7 @@ enum Shapes: Int {
     case triangle
 }
 
+// Methods return specified shape.
 class Shape: UIBezierPath {
     func line(startPoint: CGPoint, endPoint: CGPoint) -> UIBezierPath {
         let linePath = UIBezierPath()

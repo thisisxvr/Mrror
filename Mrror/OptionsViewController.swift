@@ -11,8 +11,6 @@ import UIKit
 // Protocol used to send data back to parent ViewController.
 protocol DataEnteredDelegate: class {
     func optionsModified(to options: [String: Any])
-    func clearCanvas()
-    func saveCanvas()
 }
 
 class OptionsViewController: UIViewController {
@@ -27,22 +25,34 @@ class OptionsViewController: UIViewController {
     // MARK: Overrides.
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        self.title = "Options"
         // Blur the background.
-        if !UIAccessibilityIsReduceTransparencyEnabled() {
-            self.view.backgroundColor = UIColor.clear
-            
-            let blurEffectView = UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.light))
-            blurEffectView.frame = self.view.bounds
-            blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-            
-            self.view.insertSubview(blurEffectView, at: 0)
-        } else {
-            self.view.backgroundColor = UIColor.lightGray
-        }
+//        if !UIAccessibilityIsReduceTransparencyEnabled() {
+//            self.view.backgroundColor = UIColor.clear
+//
+//            let blurEffectView = UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.light))
+//            blurEffectView.frame = self.view.bounds
+//            blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+//
+//            self.view.insertSubview(blurEffectView, at: 0)
+//        } else {
+//            self.view.backgroundColor = UIColor.lightGray
+//        }
         
         // Sets the line width slider to real value.
         lineWidthSlider.setValue(Float(optionsTmp["LIN"] as! CGFloat), animated: true)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(true)
+        
+        // Set to previous values if no options were selected.
+        if options["LIN"] == nil { options["LIN"] = optionsTmp["LIN"] }
+        if options["CLR"] == nil { options["CLR"] = optionsTmp["CLR"] }
+        
+        // Pass options bag back and return to canvas.
+        delegate?.optionsModified(to: options)
+//        performSegue(withIdentifier: "unwindToCanvasSegue", sender: self)
     }
     
     // MARK: Event handlers.
@@ -65,66 +75,5 @@ class OptionsViewController: UIViewController {
     
     @IBAction func lineWidthChanged(_ sender: UISlider) {
         options["LIN"] = CGFloat(sender.value)
-    }
-    
-    @IBAction func shapeSelected(_ sender: UIButton) {
-        switch sender.tag {
-        case Shapes.freeHand.rawValue:
-            options["SHP"] = Shapes.freeHand
-        case Shapes.line.rawValue:
-            options["SHP"] = Shapes.line
-        case Shapes.oval.rawValue:
-            options["SHP"] = Shapes.oval
-        case Shapes.rectangle.rawValue:
-            options["SHP"] = Shapes.rectangle
-        case Shapes.square.rawValue:
-            options["SHP"] = Shapes.square
-        case Shapes.triangle.rawValue:
-            options["SHP"] = Shapes.triangle
-        default:
-            options["SHP"] = Shapes.freeHand
-        }
-    }
-
-    @IBAction func clearCanvas(_ sender: UIButton) {
-        let clearAlert = UIAlertController(title: "⚠️", message: "Clear Canvas?", preferredStyle: UIAlertControllerStyle.alert)
-        
-        let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-        
-        let clear = UIAlertAction(title: "Clear", style: .destructive, handler: { (action) in
-            self.delegate?.clearCanvas()
-            self.performSegue(withIdentifier: "unwindToCanvasSegue", sender: self)
-            return
-        })
-        
-        clearAlert.addAction(clear)
-        clearAlert.addAction(cancel)
-        
-        present(clearAlert, animated: true, completion: nil)
-    }
-    
-    @IBAction func saveCanvas(_ sender: UIButton) {
-        let saveConfirm = UIAlertController(title: "💩", message: "Save Canvas?", preferredStyle: UIAlertControllerStyle.alert)
-        
-        saveConfirm.addAction(UIAlertAction(title: "Save", style: .default, handler: { (action) in
-            self.delegate?.saveCanvas()
-            self.performSegue(withIdentifier: "unwindToCanvasSegue", sender: self)
-            return
-        }))
-        
-        saveConfirm.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-        
-        present(saveConfirm, animated: true, completion: nil)
-    }
-    
-    @IBAction func backButton(_ sender: UIButton) {
-        // Set to previous values if no options were selected.
-        if options["SHP"] == nil { options["SHP"] = optionsTmp["SHP"] }
-        if options["LIN"] == nil { options["LIN"] = optionsTmp["LIN"] }
-        if options["CLR"] == nil { options["CLR"] = optionsTmp["CLR"] }
-        
-        // Pass options bag back and return to canvas.
-        delegate?.optionsModified(to: options)
-        performSegue(withIdentifier: "unwindToCanvasSegue", sender: self)
     }
 }

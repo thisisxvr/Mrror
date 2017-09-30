@@ -8,7 +8,7 @@
 
 import UIKit
 
-// UIImage extension to create image from UIView
+// UIImage extension to create image from UIView.
 extension UIImage {
     convenience init(myView: UIView) {
         UIGraphicsBeginImageContextWithOptions(myView.bounds.size, myView.isOpaque, 0.0)
@@ -47,18 +47,37 @@ class CanvasViewController: UIViewController, DataEnteredDelegate {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showOptionsSegue" {
             let optionsViewController = segue.destination as! OptionsViewController
-            optionsViewController.modalPresentationStyle = UIModalPresentationStyle.overCurrentContext // Allows the canvas to be seen behind the options screen.
+//            optionsViewController.modalPresentationStyle = UIModalPresentationStyle.overCurrentContext // Allows the canvas to be seen behind the options screen.
             
             var optionsTmp = [String: Any]()
             optionsTmp["LIN"] = lineWidth
             optionsTmp["CLR"] = color
-            optionsTmp["SHP"] = shape
-            optionsViewController.optionsTmp = optionsTmp // Sets the line width slider in the Options view to real value.
+            
+            optionsViewController.optionsTmp = optionsTmp
             optionsViewController.delegate = self
         }
     }
     
-    // MARK: Event handlers.
+    @IBAction func shapeSelected(_ sender: UIButton) {
+        switch sender.tag {
+        case Shapes.freeHand.rawValue:
+            shape = Shapes.freeHand
+        case Shapes.line.rawValue:
+            shape = Shapes.line
+        case Shapes.oval.rawValue:
+            shape = Shapes.oval
+        case Shapes.rectangle.rawValue:
+            shape = Shapes.rectangle
+        case Shapes.square.rawValue:
+            shape = Shapes.square
+        case Shapes.triangle.rawValue:
+            shape = Shapes.triangle
+        default:
+            shape = Shapes.freeHand
+        }
+    }
+    
+    // MARK: Actions.
     @IBAction func draw(_ sender: UIPanGestureRecognizer) {
         if sender.state == .began {
             customPath = UIBezierPath()
@@ -102,22 +121,43 @@ class CanvasViewController: UIViewController, DataEnteredDelegate {
         }
     }
     
-    @IBAction func unwindSegue(segue: UIStoryboardSegue) {
-        // Do nothing. 
+    @IBAction func clearCanvasBtnDidClick(_ sender: UIBarButtonItem) {
+        let clearAlert = UIAlertController(title: "⚠️", message: "Clear Canvas?", preferredStyle: UIAlertControllerStyle.alert)
+        
+        let clear = UIAlertAction(title: "Clear", style: .destructive, handler: { (action) in
+            self.canvas.layer.sublayers = nil
+        })
+        
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        
+        clearAlert.addAction(clear)
+        clearAlert.addAction(cancel)
+        
+        present(clearAlert, animated: true, completion: nil)
+    }
+    
+    @IBAction func saveCanvasBtnDidClick(_ sender: UIBarButtonItem) {
+        let saveConfirm = UIAlertController(title: "💩", message: "Save Canvas?", preferredStyle: UIAlertControllerStyle.alert)
+        
+        let save = UIAlertAction(title: "Save", style: .default, handler: { (action) in
+            let img = UIImage.init(myView: self.canvas)
+            UIImageWriteToSavedPhotosAlbum(img, nil, nil, nil)
+        })
+        
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        
+        saveConfirm.addAction(save)
+        saveConfirm.addAction(cancel)
+        
+        present(saveConfirm, animated: true, completion: nil)
+    }
+    
+    @IBAction func unwindToCanvas(segue: UIStoryboardSegue) {
+        // Do nothing.
     }
     
     // MARK: Conform to protocol DataEnteredDelegate.
-    func clearCanvas() {
-        canvas.layer.sublayers = nil
-    }
-    
-    func saveCanvas() {
-        let img = UIImage.init(myView: canvas)
-        UIImageWriteToSavedPhotosAlbum(img, nil, nil, nil)
-    }
-    
     func optionsModified(to options: [String: Any]) {
-        shape = options["SHP"] as! Shapes
         color = options["CLR"] as! CGColor
         lineWidth = options["LIN"] as! CGFloat
     }
