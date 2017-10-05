@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="13240" systemVersion="16G29" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="History" representedClassName=".History" syncable="YES">
+        <attribute name="time" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="user" attributeType="String" syncable="YES"/>
+        <relationship name="entries" toMany="YES" deletionRule="Nullify" destinationEntity="User" inverseName="logins" inverseEntity="User" syncable="YES"/>
+    </entity>
+    <entity name="User" representedClassName=".User" syncable="YES">
+        <attribute name="ageGroup" attributeType="String" syncable="YES"/>
+        <attribute name="gender" attributeType="String" syncable="YES"/>
+        <attribute name="occupation" attributeType="String" syncable="YES"/>
+        <attribute name="password" attributeType="String" syncable="YES"/>
+        <attribute name="registrationTime" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="username" attributeType="String" syncable="YES"/>
+        <relationship name="logins" toMany="YES" deletionRule="Nullify" destinationEntity="History" inverseName="entries" inverseEntity="History" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="History" positionX="241" positionY="153" width="128" height="90"/>
+        <element name="User" positionX="-63" positionY="-18" width="128" height="150"/>
+    </elements>
+</model>
